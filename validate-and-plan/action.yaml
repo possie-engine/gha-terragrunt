@@ -1,0 +1,66 @@
+name: "Terragrunt Validate and/or Plan"
+author: "travis"
+description: "Validate all terragrunt files within a project and optionally print out terragrunt deployment plans. This action can only be used for situations where AWS is the cloud provider and Kubernetes is the deployment target."
+inputs:
+  aws_credentials:
+    description: "AWS access credentials"
+    required: true
+  aws_config:
+    description: "AWS configuration"
+    required: true
+  kube_config:
+    description: "Kubernetes configuration data"
+    required: true
+  tf_module_key_priv:
+    description: "SSH private key for fetching terraform modules"
+    required: true
+  cr_url:
+    description: "Docker image container registry server URL (default to: ghcr.io)"
+    required: false
+    default: "ghcr.io"
+  cr_username:
+    description: "Docker image container registry user name"
+    required: true
+    default: "dr-travis"
+  cr_pwd:
+    description: "Docker image container registry password"
+    required: true
+  tf_version:
+    description: "Terraform version to be used"
+    required: false
+    default: "latest"
+  tg_version:
+    description: "Terragrunt version to be used"
+    required: false
+    default: "latest"
+  tg_plan:
+    description: "Execute Terragrunt plan or not"
+    required: false
+    default: "true"
+  tg_fmt:
+    description: "Format Terraform and Terragrunt HCL files"
+    required: false
+    default: "true"
+  workdir:
+    description: "Terragrunt working directory"
+    required: false
+    default: "."
+runs:
+  using: "composite"
+  steps:
+    - run: ${{ github.action_path }}/scripts/main.sh
+      shell: bash
+      working-directory: ${{ github.workspace }}/${{ inputs.workdir }}
+      env:
+        INPUT_AWS_CREDENTIALS: ${{ inputs.aws_credentials }}
+        INPUT_AWS_CONFIG: ${{ inputs.aws_config }}
+        INPUT_KUBE_CONFIG: ${{ inputs.kube_config }}
+        INPUT_TF_MODULE_KEY_PRIV: ${{ inputs.tf_module_key_priv }}
+        INPUT_CR_URL: ${{ inputs.cr_url }}
+        INPUT_CR_USERNAME: ${{ inputs.cr_username }}
+        INPUT_CR_PWD: ${{ inputs.cr_pwd }}
+        INPUT_TF_VERSION: ${{ inputs.tf_version }}
+        INPUT_TG_VERSION: ${{ inputs.tg_version }}
+        INPUT_TG_PLAN: ${{ inputs.tg_plan }}
+        INPUT_TG_FMT: ${{ inputs.tg_fmt }}
+        INPUT_WORKDIR: ${{ inputs.workdir }}
