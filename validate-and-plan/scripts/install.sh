@@ -10,7 +10,7 @@ function installTerraform {
     tfVersion=$(curl -sL https://releases.hashicorp.com/terraform/index.json | jq -r '.versions[].version' | grep -v '[-].*' | sort -rV | head -n 1)
 
     if [[ -z "${tfVersion}" ]]; then
-      echo "Failed to fetch the latest version"
+      echo "${BRed}Failed to fetch the latest version${NC}"
       exit 1
     fi
 	else
@@ -22,18 +22,18 @@ function installTerraform {
   echo "Downloading Terraform v${tfVersion}"
   curl -s -S -L -o /tmp/terraform_${tfVersion} ${url}
   if [ "${?}" -ne 0 ]; then
-    echo "Failed to download Terraform v${tfVersion}"
+    echo "${BRed}Failed to download Terraform v${tfVersion}${NC}"
     exit 1
   fi
-  echo "Successfully downloaded Terraform v${tfVersion}"
+  echo "${BGreen}Successfully downloaded Terraform v${tfVersion}${NC}"
 
   echo "Unzipping Terraform v${tfVersion}"
 	unzip -d ~/bin /tmp/terraform_${tfVersion} &> /dev/null
   if [ "${?}" -ne 0 ]; then
-    echo "Failed to unzip Terraform v${tfVersion}"
+    echo "${BRed}Failed to unzip Terraform v${tfVersion}${NC}"
     exit 1
   fi
-  echo "Successfully unzipped Terraform v${tfVersion}"
+  echo "${BGreen}Successfully unzipped Terraform v${tfVersion}${NC}"
 }
 
 function installTerragrunt {
@@ -43,7 +43,7 @@ function installTerragrunt {
     tgVersion=${latestURL##*/}
 
     if [[ -z "${tgVersion}" ]]; then
-      echo "Failed to fetch the latest version"
+      echo "${BRed}Failed to fetch the latest version${NC}"
       exit 1
     fi
 	else
@@ -55,17 +55,17 @@ function installTerragrunt {
   echo "Downloading Terragrunt ${tgVersion}"
   curl -s -S -L -o /tmp/terragrunt ${url}
   if [ "${?}" -ne 0 ]; then
-    echo "Failed to download Terragrunt ${tgVersion}"
+    echo "${BRed}Failed to download Terragrunt ${tgVersion}${NC}"
     exit 1
   fi
-  echo "Successfully downloaded Terragrunt ${tgVersion}"
+  echo "${BGreen}Successfully downloaded Terragrunt ${tgVersion}${NC}"
 
 	echo "Moving Terragrunt ${tgVersion} to PATH"
   chmod +x /tmp/terragrunt
   mv /tmp/terragrunt ~/bin/terragrunt
   if [ "${?}" -ne 0 ]; then
-    echo "Failed to move Terragrunt ${tgVersion}"
+    echo "${BRed}Failed to move Terragrunt ${tgVersion}${NC}"
     exit 1
   fi
-  echo "Successfully moved Terragrunt ${tgVersion}"
+  echo "${BGreen}Successfully moved Terragrunt ${tgVersion}${NC}"
 }

@@ -10,7 +10,7 @@ function terragruntPlan {
 
   # Exit code of 0 indicates success with no changes. Print the output and exit.
   if [ ${planExitCode} -eq 0 ]; then
-    echo "plan: info: successfully planned Terragrunt configuration in ${tfWorkingDir}"
+    echo "${BGreen}plan: info: successfully planned Terragrunt configuration in ${tfWorkingDir}${NC}"
     echo "${planOutput}"
     echo
     echo ::set-output name=tf_actions_plan_has_changes::${planHasChanges}
@@ -20,7 +20,7 @@ function terragruntPlan {
     planExitCode=0
     planHasChanges=true
     planCommentStatus="Success"
-    echo "plan: info: successfully planned Terragrunt configuration in ${tfWorkingDir}"
+    echo "${BGreen}plan: info: successfully planned Terragrunt configuration in ${tfWorkingDir}${NC}"
     echo "${planOutput}"
     echo
     if echo "${planOutput}" | egrep '^-{72}$' &> /dev/null; then
@@ -32,7 +32,7 @@ function terragruntPlan {
     planOutput=$(echo "${planOutput}" | tail -c 65000 )
   else
 		# Exit code of !0 indicates failure.
-    echo "plan: error: failed to plan Terragrunt configuration in ${tfWorkingDir}"
+    echo "${BRed}plan: error: failed to plan Terragrunt configuration in ${tfWorkingDir}${NC}"
     echo "${planOutput}"
     echo
 		exit ${planExitCode}

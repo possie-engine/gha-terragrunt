@@ -8,12 +8,12 @@ function terragruntInit {
 
   # Exit code of 0 indicates success. Print the output and exit.
   if [ ${initExitCode} -eq 0 ]; then
-    echo "init: info: successfully initialized Terragrunt configuration in ${TG_WORKDIR}"
+    echo "${BGreen}init: info: successfully initialized Terragrunt configuration in ${TG_WORKDIR}${NC}"
     echo "${initOutput}"
     echo
   else
   	# Exit code of !0 indicates failure.
-  	echo "init: error: failed to initialize Terragrunt configuration in ${TG_WORKDIR}"
+  	echo "${BRed}init: error: failed to initialize Terragrunt configuration in ${TG_WORKDIR}${NC}"
   	echo "${initOutput}"
   	echo
 		exit ${initExitCode}
