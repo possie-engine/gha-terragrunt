@@ -133,14 +133,14 @@ This action includes total four Terragrunt commands, i.e. `terragrunt fmt` to ch
 | artifact_output_dir | The directory that contains output json file. It's an absolute path that can be directly referred to by other actions. |
 | artifact_name       | The file name of the output json file. No path is included, just a name, e.g. "outputs.json".                          |
 
-1. Command Triggering Conditions
+4. Command Triggering Conditions
 
 - `terragrunt fmt` command is executed by default, but can be suppressed by the input variable `tf_fmt`.
 - `terragrunt apply-all` is triggered **ONLY** by merged pull request events. This behaviour is internally enforced to avoid accidental modifications on the real-world infrastructure, though the action itself can be triggered by external github events.
 - `terragrunt output-all` is executed by default, but can be suppressed explicitly by input variable `tf_output`. It's also disabled in the `terragrunt destroy-all` operation.
 - `terragrunt destroy-all` is **ONLY** executed by pushing a github tag that matches the regular expression defined in `destroy_tag_regex`. Because the destroy operation is **dangerous**, it's not only trigged manually by assigning tags, but is also managed **ONLY** by the repo administrator who has the privilege to push to the `main` branch.
 
-3. Code Examples
+5. Code Examples
 
 This action is usually used on the protected `main` branch which ONLY the repo admin has the full access to it. Other collaborators can not push to the `main` branch. So, destroying resources can ONLY be conducted by the admin and applying resource changes are conducted by pull requests.
 
