@@ -15,7 +15,7 @@ function installTerraform() {
 			exit 1
 		fi
 	else
-		echo "Using the input version of Terraform: ${tfVersion}"
+		echo "Using the input version of Terraform: v${tfVersion}"
 	fi
 
 	url="https://releases.hashicorp.com/terraform/${tfVersion}/terraform_${tfVersion}_linux_amd64.zip"
@@ -48,6 +48,7 @@ function installTerragrunt() {
 			exit 1
 		fi
 	else
+		tgVersion="v${tgVersion}"
 		echo "Using the input version of Terragrunt: ${tgVersion}"
 	fi
 
