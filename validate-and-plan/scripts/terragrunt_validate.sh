@@ -1,17 +1,17 @@
 #!/bin/bash
 
-function terragruntValidate {
-  # Gather the output of `terragrunt validate`.
-  echo "validate: info: validating Terragrunt configuration in ${tfWorkingDir}"
-  validateOutput=$(terragrunt validate-all ${*} 2>&1)
-  validateExitCode=${?}
+function terragruntValidate() {
+	# Gather the output of `terragrunt validate`.
+	echo "validate: info: validating Terragrunt configuration in ${tfWorkingDir}"
+	validateOutput=$(terragrunt validate-all ${*} 2>&1)
+	validateExitCode=${?}
 
-  # Exit code of 0 indicates success. Print the output and exit.
-  if [ ${validateExitCode} -eq 0 ]; then
+	# Exit code of 0 indicates success. Print the output and exit.
+	if [ ${validateExitCode} -eq 0 ]; then
 		echo
-    echo -e "${BGreen}validate: info: successfully validated Terragrunt configuration in ${tfWorkingDir}${NC}"
-    echo "${validateOutput}"
-    echo
+		echo -e "${BGreen}validate: info: successfully validated Terragrunt configuration in ${tfWorkingDir}${NC}"
+		echo "${validateOutput}"
+		echo
 	else
 		# Exit code of !0 indicates failure.
 		echo

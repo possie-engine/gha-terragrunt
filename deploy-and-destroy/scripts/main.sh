@@ -1,44 +1,55 @@
 #!/bin/bash
 
-function hasPrefix {
-  case ${2} in
-    "${1}"*)
-      true
-      ;;
-    *)
-      false
-      ;;
-  esac
+function hasPrefix() {
+	case ${2} in
+	"${1}"*)
+		true
+		;;
+	*)
+		false
+		;;
+	esac
 }
 
-function cleanUpTag {
+function cleanUpTag() {
 	echo -e "${BPurple}Deleting the tag to start terragrunt destroy...${NC}"
 	git push --delete origin $1
 }
 
-function main {
-  # Source the other files to gain access to their functions
-  scriptDir=$(dirname ${0})
+# Generate a temp dummy empty tf file in the root workdir to avoid the error:
+# didn't find any terraform files in the folder (*.tf)
+# This error occurs when your project contains terragrunt.hcl files only withou any terraform files
+function generateDummyTfFile() {
+	TMPFILE=`mktemp XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX`
+	mv $TMPFILE $TMPFILE.tf
+	# This generates a random file like: MYqjEVirAmgQd9iSUA9dXTYnRRQzd1YQ.tf
+}
+
+function main() {
+	# Source the other files to gain access to their functions
+	scriptDir=$(dirname ${0})
 	source ${scriptDir}/colours.sh
 	source ${scriptDir}/install.sh
 	source ${scriptDir}/parse_inputs.sh
 	source ${scriptDir}/setup_secrets.sh
 	source ${scriptDir}/terragrunt_init.sh
 	source ${scriptDir}/terragrunt_fmt.sh
-  source ${scriptDir}/terragrunt_apply.sh
-  source ${scriptDir}/terragrunt_destroy.sh
+	source ${scriptDir}/terragrunt_apply.sh
+	source ${scriptDir}/terragrunt_destroy.sh
 	source ${scriptDir}/terragrunt_output.sh
 
 	# Set up environment
 	echo -e "${BGreen}Start Environment Setup...${NC}"
-  parseInputs
+	parseInputs
 	setupSecrets
-  installTerraform
+	installTerraform
 	installTerragrunt
 	echo -e "${BGreen}Complete Environment Setup Successfully!${NC}"
 	echo
 	echo -e "${BBlue}Start Terragrunt Commands...${NC}"
 
+	# Generate a dummy tf file before initialization
+	generateDummyTfFile
 	# (Required) Initialize Terragrunt
 	terragruntInit "${*}"
 	echo -e "${BBlue}Complete Terragrunt Initialization${NC}"

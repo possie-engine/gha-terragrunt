@@ -1,48 +1,48 @@
 #!/bin/bash
 
-function parseInputs {
-  # Required inputs validation
-  if [ "${AWS_CREDENTIALS}" != "" ]; then
+function parseInputs() {
+	# Required inputs validation
+	if [ "${AWS_CREDENTIALS}" != "" ]; then
 		awsCredentials=${AWS_CREDENTIALS}
 	else
-    echo -e "${BRed}Input aws credentials cannot be empty${NC}"
-    exit 1
-  fi
+		echo -e "${BRed}Input aws credentials cannot be empty${NC}"
+		exit 1
+	fi
 
-  if [ "${AWS_CONFIG}" != "" ]; then
+	if [ "${AWS_CONFIG}" != "" ]; then
 		awsConfig=${AWS_CONFIG}
 	else
-    echo -e "${BRed}Input aws config cannot be empty${NC}"
-    exit 1
-  fi
+		echo -e "${BRed}Input aws config cannot be empty${NC}"
+		exit 1
+	fi
 
-  if [ "${KUBE_CONFIG}" != "" ]; then
+	if [ "${KUBE_CONFIG}" != "" ]; then
 		kubeConfig=${KUBE_CONFIG}
 	else
-    echo -e "${BRed}Input kubernetes config cannot be empty${NC}"
-    exit 1
-  fi
+		echo -e "${BRed}Input kubernetes config cannot be empty${NC}"
+		exit 1
+	fi
 
 	if [ "${TF_MODULE_KEY}" != "" ]; then
 		tfModuleKey=${TF_MODULE_KEY}
 	else
-    echo -e "${BRed}Input terraform module access ssh private key cannot be empty${NC}"
-    exit 1
-  fi
+		echo -e "${BRed}Input terraform module access ssh private key cannot be empty${NC}"
+		exit 1
+	fi
 
-  if [ "${CR_USERNAME}" == "" ]; then
-    echo -e "${BRed}Input container registry username cannot be empty${NC}"
-    exit 1
-  fi
+	if [ "${CR_USERNAME}" == "" ]; then
+		echo -e "${BRed}Input container registry username cannot be empty${NC}"
+		exit 1
+	fi
 
-  if [ "${CR_PWD}" == "" ]; then
-    echo -e "${BRed}Input container registry password cannot be empty${NC}"
-    exit 1
-  fi
+	if [ "${CR_PWD}" == "" ]; then
+		echo -e "${BRed}Input container registry password cannot be empty${NC}"
+		exit 1
+	fi
 
 	# Optional inputs validation
-	tfWorkingDir=${WORKDIR:-.} # Default: working directory is the root folder of the repo
-	export CR_URL=${CR_URL:-ghcr.io}	# Default value is set to ghcr
+	tfWorkingDir=${WORKDIR:-.}       # Default: working directory is the root folder of the repo
+	export CR_URL=${CR_URL:-ghcr.io} # Default value is set to ghcr
 
 	regex='^[0-9]+\.[0-9]+\.[0-9]+$'
 	tfVersion=${INPUT_TF_VERSION} # Default value is set to latest
@@ -68,7 +68,7 @@ function parseInputs {
 	skipPlanTagRegex=${INPUT_TAG_REGEX}
 
 	# Terragrunt operation conditional variables
-	tgFmt=${INPUT_TG_FMT} # Default: conduct `terragrunt format` step
+	tgFmt=${INPUT_TG_FMT}   # Default: conduct `terragrunt format` step
 	tgPlan=${INPUT_TG_PLAN} # Default: use tag to control if `terragrunt plan-all` step should be conducted
 
 	# Change Terragrunt planning conditional variable by tag
