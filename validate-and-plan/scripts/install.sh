@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # The folder to save the downloaded binaries
+mkdir -p ~/bin
 export PATH=~/bin:$PATH
 
 function installTerraform() {
