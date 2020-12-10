@@ -9,13 +9,13 @@ function terragruntValidate {
   # Exit code of 0 indicates success. Print the output and exit.
   if [ ${validateExitCode} -eq 0 ]; then
 		echo
-    echo "${BGreen}validate: info: successfully validated Terragrunt configuration in ${tfWorkingDir}${NC}"
+    echo -e "${BGreen}validate: info: successfully validated Terragrunt configuration in ${tfWorkingDir}${NC}"
     echo "${validateOutput}"
     echo
 	else
 		# Exit code of !0 indicates failure.
 		echo
-		echo "${BRed}validate: error: failed to validate Terragrunt configuration in ${tfWorkingDir}${NC}"
+		echo -e "${BRed}validate: error: failed to validate Terragrunt configuration in ${tfWorkingDir}${NC}"
 		echo "${validateOutput}"
 		echo
 		exit ${validateExitCode}

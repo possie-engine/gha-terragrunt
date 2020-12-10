@@ -1,9 +1,45 @@
 name: "Terragrunt Validate and/or Plan"
 author: "travis"
 description: "Validate all terragrunt files within a project and optionally print out terragrunt deployment plans. This action can only be used for situations where AWS is the cloud provider and Kubernetes is the deployment target."
+inputs:
+  tf_version:
+    description: "Terraform Version"
+    required: false
+    default: "latest"
+  tg_version:
+    description: "Terragrunt Version"
+    required: false
+    default: "latest"
+  tg_fmt:
+    description: "Whether or not terragrunt format should be conducted"
+    required: false
+    default: "true"
+  tg_plan:
+    description: "Whether or not terragrunt plan should be conducted"
+    required: false
+    default: "true"
+  skip_tag_regex:
+    description: "Regular expression to skip terragrunt planning for certain tags"
+    required: false
+    default: "-skip$"
+outputs:
+  plan_has_changes:
+    description: "Terragrunt plan has changed or not (Boolean value)"
+    value: ${{ steps.main.outputs.tg_plan_has_changes }}
+  plan:
+    description: "Terragrunt plan outputs"
+    value: ${{ steps.main.outputs.tg_plan }}
 runs:
   using: "composite"
   steps:
-    - run: ${{ github.action_path }}/scripts/main.sh
+    - id: main
       shell: bash
-      working-directory: ${{ github.workspace }}/$WORKDIR
+      run: ${{ github.action_path }}/scripts/main.sh
+      working-directory: ${{ github.workspace }}/${{ env.WORKDIR }}
+      env:
+        INPUT_TF_VERSION: ${{ inputs.tf_version }}
+        INPUT_TG_VERSION: ${{ inputs.tg_version }}
+        INPUT_TG_FMT: ${{ inputs.tg_fmt }}
+        INPUT_TG_PLAN: ${{ inputs.tg_plan }}
+        GH_REF: ${{ github.ref }}
+        INPUT_TAG_REGEX: ${{ inputs.skip_tag_regex }}

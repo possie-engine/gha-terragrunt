@@ -12,7 +12,7 @@ function hasPrefix {
 }
 
 function cleanUpTag {
-	echo -e "${BPurple}Deleting the tag to skip terragrunt planning...${NC}"
+	echo -e "${BPurple}Deleting the tag to start terragrunt destroy...${NC}"
 	git push --delete origin $1
 }
 
@@ -23,10 +23,11 @@ function main {
 	source ${scriptDir}/install.sh
 	source ${scriptDir}/parse_inputs.sh
 	source ${scriptDir}/setup_secrets.sh
+	source ${scriptDir}/terragrunt_init.sh
 	source ${scriptDir}/terragrunt_fmt.sh
-  source ${scriptDir}/terragrunt_init.sh
-  source ${scriptDir}/terragrunt_validate.sh
-  source ${scriptDir}/terragrunt_plan.sh
+  source ${scriptDir}/terragrunt_apply.sh
+  source ${scriptDir}/terragrunt_destroy.sh
+	source ${scriptDir}/terragrunt_output.sh
 
 	# Set up environment
 	echo -e "${BGreen}Start Environment Setup...${NC}"
@@ -49,14 +50,22 @@ function main {
 		terragruntFmt "${*}"
 	fi
 
-	# (Required) Terragrunt Validation
-	echo -e "${BBlue}Start Terragrunt Validation...${NC}"
-	terragruntValidate "${*}"
+	# (Optional) Terragrunt Apply
+	if [ ${tgApply} == true ]; then
+		echo -e "${BBlue}Start Terragrunt Apply...${NC}"
+		terragruntApply "${*}"
+	fi
 
-	# (Optional) Terragrunt Planning
-	if [ ${tgPlan} == true ]; then
-		echo -e "${BBlue}Start Terragrunt Planning...${NC}"
-		terragruntPlan "${*}"
+	# (Optional) Terragrunt Destroy
+	if [ ${tgDestroy} == true ]; then
+		echo -e "${BBlue}Start Terragrunt Destroy...${NC}"
+		terragruntDestroy "${*}"
+	fi
+
+	# (Optional) Terragrunt Output
+	if [ ${tgOutput} == true ]; then
+		echo -e "${BBlue}Start Terragrunt Output...${NC}"
+		terragruntOutput "${*}"
 	fi
 
 	echo -e "${BYellow}All Steps Completed Successfully!${NC}"

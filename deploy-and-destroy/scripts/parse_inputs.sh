@@ -45,36 +45,47 @@ function parseInputs {
 	export CR_URL=${CR_URL:-ghcr.io}	# Default value is set to ghcr
 
 	regex='^[0-9]+\.[0-9]+\.[0-9]+$'
-	tfVersion=${INPUT_TF_VERSION} # Default value is set to latest
+	tfVersion=${INPUT_TF_VERSION}
 	if [ "${tfVersion}" != "latest" ]; then
 		[[ $tfVersion =~ $regex ]]
 		if [ ${?} -ne 0 ]; then
 			echo -e "${BRed}Input terraform version should have format: xx.yy.zz, but received ${tfVersion}${NC}"
-			exit 1
 		fi
 	fi
 
-	tgVersion=${INPUT_TG_VERSION} # Default value is set to latest
+	tgVersion=${INPUT_TG_VERSION}
 	if [ "${tgVersion}" != "latest" ]; then
 		[[ $tgVersion =~ $regex ]]
 		if [ ${?} -ne 0 ]; then
 			echo -e "${BRed}Input terragrunt version should have format: xx.yy.zz, but received ${tgVersion}${NC}"
-			exit 1
 		fi
 	fi
 
 	# Additional Github Context Inputs
+	ghWorkSpace=${GH_WORKSPACE}
+	ghEventName=${GH_EVENT_NAME}
 	ghRef=${GH_REF#refs/tags/}
-	skipPlanTagRegex=${INPUT_TAG_REGEX}
+	ghIsPrMerge=${GH_IS_PR_MERGE}
 
 	# Terragrunt operation conditional variables
 	tgFmt=${INPUT_TG_FMT} # Default: conduct `terragrunt format` step
-	tgPlan=${INPUT_TG_PLAN} # Default: use tag to control if `terragrunt plan-all` step should be conducted
+	tgOutput=${INPUT_TG_OUTPUT} # Default: conduct `terragrunt output-all` step
+	tgOutputDir=${INPUT_TG_OUTPUT_DIR} # Output artifact directory
+	tgOutputFileName=${INPUT_TG_OUTPUT_FILENAME} # Output artifact name
+	tgApply=false # Default: don't apply
+	tgDestroy=false # Default: don't destroy
 
-	# Change Terragrunt planning conditional variable by tag
-	[[ $ghRef =~ $skipPlanTagRegex ]]
-	if [ ${?} -eq 0 ]; then
-		tgPlan=false
+	# Terragrunt apply step condition (triggered only by merged pull request)
+	if [ ${ghEventName} == "pull_request" ] && [ ${ghIsPrMerge} == true ]; then
+		tgApply=true
+	fi
+
+	# Terragrunt destroy step condition (triggered only by pushing a matched tag)
+	tgDestroyTriggerTagRegex=${INPUT_DESTROY_TAG_REGEX}
+	[[ $ghRef =~ $tgDestroyTriggerTagRegex ]]
+	if [ ${ghEventName} == "push" ] && [ ${?} -eq 0 ]; then
+		tgDestroy=true
+		tgOutput=false # Don't output anything on destroy
 		cleanUpTag $ghRef
 	fi
 }

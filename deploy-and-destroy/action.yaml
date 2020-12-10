@@ -1,0 +1,57 @@
+name: "Terragrunt Deploy and Destroy"
+author: "travis"
+description: "Deploy or Destroy all the resources into the real world using Terragrunt. This action can only be used for situations where AWS is the cloud provider and Kubernetes is the deployment target."
+inputs:
+  tf_version:
+    description: "Terraform Version"
+    required: false
+    default: "latest"
+  tg_version:
+    description: "Terragrunt Version"
+    required: false
+    default: "latest"
+  tg_fmt:
+    description: "Whether or not terragrunt format should be conducted"
+    required: false
+    default: "true"
+  tg_output:
+    description: "Whether or not terragrunt output should be conducted"
+    required: false
+    default: "true"
+  tg_output_dir:
+    description: "The terragrunt output directory"
+    required: false
+    default: "_gha_outputs"
+  tg_output_filename:
+    description: "The terragrunt output file"
+    required: false
+    default: "terragrunt_outputs.json"
+  destroy_tag_regex:
+    description: "Regular expression for certain tags to trigger terragrunt destroy"
+    required: false
+    default: "-destroy$"
+outputs:
+  artifact_output_dir:
+    description: "Directory to store the terragrunt output json-format file"
+    value: ${{ github.workspace }}/${{ env.WORKDIR }}/${{ steps.main.outputs.tg_output_dir }}
+  artifact_name:
+    description: "Output artifact name"
+    value: ${{ steps.main.outputs.tg_output_file }}
+runs:
+  using: "composite"
+  steps:
+    - id: main
+      shell: bash
+      run: ${{ github.action_path }}/scripts/main.sh
+      working-directory: ${{ github.workspace }}/${{ env.WORKDIR }}
+      env:
+        INPUT_TF_VERSION: ${{ inputs.tf_version }}
+        INPUT_TG_VERSION: ${{ inputs.tg_version }}
+        INPUT_TG_FMT: ${{ inputs.tg_fmt }}
+        INPUT_TG_OUTPUT: ${{ inputs.tg_output }}
+        INPUT_TG_OUTPUT_DIR: ${{ inputs.tg_output_dir }}
+        INPUT_TG_OUTPUT_FILENAME: ${{ inputs.tg_output_filename }}
+        INPUT_DESTROY_TAG_REGEX: ${{ inputs.destroy_tag_regex }}
+        GH_EVENT_NAME: ${{ github.event_name }}
+        GH_REF: ${{ github.ref }}
+        GH_IS_PR_MERGE: ${{ github.event.pull_request.merged }}
