@@ -23,26 +23,12 @@ function parseInputs() {
 		exit 1
 	fi
 
-	if [ "${TF_MODULE_KEY}" != "" ]; then
-		tfModuleKey=${TF_MODULE_KEY}
-	else
-		echo -e "${BRed}Input terraform module access ssh private key cannot be empty${NC}"
-		exit 1
-	fi
-
-	if [ "${CR_USERNAME}" == "" ]; then
-		echo -e "${BRed}Input container registry username cannot be empty${NC}"
-		exit 1
-	fi
-
-	if [ "${CR_PWD}" == "" ]; then
-		echo -e "${BRed}Input container registry password cannot be empty${NC}"
-		exit 1
-	fi
-
 	# Optional inputs validation
-	tfWorkingDir=${WORKDIR:-.}       # Default: working directory is the root folder of the repo
-	export CR_URL=${CR_URL:-ghcr.io} # Default value is set to ghcr
+	tfWorkingDir=${WORKDIR:-.}            # Default: working directory is the root folder of the repo
+	tfModuleKey=${TF_MODULE_KEY:-""}      # Default: empty
+	export CR_URL=${CR_URL:-""}           # Default: empty
+	export CR_USERNAME=${CR_USERNAME:-""} # Default: empty
+	export CR_PWD=${CR_PWD:-""}           # Default: empty
 
 	regex='^[0-9]+\.[0-9]+\.[0-9]+$'
 	tfVersion=${INPUT_TF_VERSION} # Default value is set to latest

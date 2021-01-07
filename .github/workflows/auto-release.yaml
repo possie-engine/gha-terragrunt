@@ -1,4 +1,4 @@
-name: "Automatic Releases by Tags"
+name: "Release"
 
 on:
   push:

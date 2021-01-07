@@ -15,18 +15,18 @@ This action includes total three Terragrunt commands, i.e. `terragrunt fmt` to c
 
 1. Environment variables
 
-| Variable Name   | Required? | Description                                                                                                                                                                       |
-| :-------------- | :-------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| WORKDIR         | No        | Terragrunt working directory.<br/> It's a relative path within a repo's root folder.<br/> Default to the root folder.                                                             |
-| AWS_CREDENTIALS | Yes       | AWS credential file to manipulate AWS resources. <br/> On *nix and macOS system, it's located in `$HOME/.aws/credentials`.                                                        |
-| AWS_CONFIG      | Yes       | AWS configuration file to manipulate AWS resources. <br/> On *nix and macOS system, it's located in `$HOME/.aws/config`.                                                          |
-| KUBE_CONFIG     | Yes       | Kubernetes access credentials and configuration file. <br/> On *nix and macOS system, it's located in `$HOME/.kube/config`.                                                       |
-| TF_MODULE_KEY   | Yes       | SSH private key to fetch Terraform modules in private repos. <br/> The corresponding public key is known as the `Deploy Key` that must be attached to the module repo in advance. |
-| CR_URL          | No        | Docker container registry server url. <br/> Default to `ghcr.io` to use the github container registry.                                                                            |
-| CR_USERNAME     | Yes       | Username to access the above container registry. <br/> With ghcr, this is your github's account name.                                                                             |
-| CR_PWD          | Yes       | Password to access the above container registry. <br/> With ghcr, this is a personal access token with appropriate privileges attached to your github account.                    |
+| Variable Name   | Required? | Description                                                                                                                                                                                                |
+| :-------------- | :-------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| WORKDIR         | No        | Terragrunt working directory.<br/> It's a relative path within a repo's root folder.<br/> Default to the root folder.                                                                                      |
+| AWS_CREDENTIALS | Yes       | AWS credential file to manipulate AWS resources. <br/> On *nix and macOS system, it's located in `$HOME/.aws/credentials`.                                                                                 |
+| AWS_CONFIG      | Yes       | AWS configuration file to manipulate AWS resources. <br/> On *nix and macOS system, it's located in `$HOME/.aws/config`.                                                                                   |
+| KUBE_CONFIG     | Yes       | Kubernetes access credentials and configuration file. <br/> On *nix and macOS system, it's located in `$HOME/.kube/config`.                                                                                |
+| TF_MODULE_KEY   | No        | SSH private key to fetch Terraform modules in private repos. <br/> The corresponding public key is known as the `Deploy Key` that must be attached to the module repo in advance. Default to empty string. |
+| CR_URL          | No        | Docker container registry server url. <br/> Default to empty string.                                                                                                                                       |
+| CR_USERNAME     | No        | Username to access the above container registry. <br/> With ghcr, this is your github's account name. Default to empty string.                                                                             |
+| CR_PWD          | No        | Password to access the above container registry. <br/> With ghcr, this is a personal access token with appropriate privileges attached to your github account. Default to empty string.                    |
 
-2. Input variables
+1. Input variables
 
 | Variable Name  | Required? | Description                                                                                                                                                                                                                                                                                                |
 | :------------- | :-------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -103,16 +103,16 @@ This action includes total four Terragrunt commands, i.e. `terragrunt fmt` to ch
 
 1. Environment variables
 
-| Variable Name   | Required? | Description                                                                                                                                                                       |
-| :-------------- | :-------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| WORKDIR         | No        | Terragrunt working directory.<br/> It's a relative path within a repo's root folder.<br/> Default to the root folder.                                                             |
-| AWS_CREDENTIALS | Yes       | AWS credential file to manipulate AWS resources. <br/> On *nix and macOS system, it's located in `$HOME/.aws/credentials`.                                                        |
-| AWS_CONFIG      | Yes       | AWS configuration file to manipulate AWS resources. <br/> On *nix and macOS system, it's located in `$HOME/.aws/config`.                                                          |
-| KUBE_CONFIG     | Yes       | Kubernetes access credentials and configuration file. <br/> On *nix and macOS system, it's located in `$HOME/.kube/config`.                                                       |
-| TF_MODULE_KEY   | Yes       | SSH private key to fetch Terraform modules in private repos. <br/> The corresponding public key is known as the `Deploy Key` that must be attached to the module repo in advance. |
-| CR_URL          | No        | Docker container registry server url. <br/> Default to `ghcr.io` to use the github container registry.                                                                            |
-| CR_USERNAME     | Yes       | Username to access the above container registry. <br/> With ghcr, this is your github's account name.                                                                             |
-| CR_PWD          | Yes       | Password to access the above container registry. <br/> With ghcr, this is a personal access token with appropriate privileges attached to your github account.                    |
+| Variable Name   | Required? | Description                                                                                                                                                                                                |
+| :-------------- | :-------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| WORKDIR         | No        | Terragrunt working directory.<br/> It's a relative path within a repo's root folder.<br/> Default to the root folder.                                                                                      |
+| AWS_CREDENTIALS | Yes       | AWS credential file to manipulate AWS resources. <br/> On *nix and macOS system, it's located in `$HOME/.aws/credentials`.                                                                                 |
+| AWS_CONFIG      | Yes       | AWS configuration file to manipulate AWS resources. <br/> On *nix and macOS system, it's located in `$HOME/.aws/config`.                                                                                   |
+| KUBE_CONFIG     | Yes       | Kubernetes access credentials and configuration file. <br/> On *nix and macOS system, it's located in `$HOME/.kube/config`.                                                                                |
+| TF_MODULE_KEY   | No        | SSH private key to fetch Terraform modules in private repos. <br/> The corresponding public key is known as the `Deploy Key` that must be attached to the module repo in advance. Default to empty string. |
+| CR_URL          | No        | Docker container registry server url. <br/> Default to empty string.                                                                                                                                       |
+| CR_USERNAME     | No        | Username to access the above container registry. <br/> With ghcr, this is your github's account name. Default to empty string.                                                                             |
+| CR_PWD          | No        | Password to access the above container registry. <br/> With ghcr, this is a personal access token with appropriate privileges attached to your github account. Default to empty string.                    |
 
 2. Input variables
 
