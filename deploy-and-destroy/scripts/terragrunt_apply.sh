@@ -3,7 +3,8 @@
 function terragruntApply() {
 	# Gather the output of `terragrunt apply`.
 	echo "apply: info: applying Terragrunt configuration in ${tfWorkingDir}"
-	applyOutput=$(terragrunt apply-all --terragrunt-non-interactive ${*} 2>&1)
+	applyCommand="terragrunt apply-all --terragrunt-non-interactive ${*} 2>&1"
+	applyOutput=$(eval ${applyCommand})
 	applyExitCode=${?}
 
 	# Exit code of 0 indicates success. Print the output and exit.

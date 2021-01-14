@@ -18,6 +18,9 @@ inputs:
     description: "Whether or not terragrunt plan should be conducted"
     required: false
     default: "true"
+  tg_args:
+    description: "Additional arguments to be passed to terragrunt command"
+    required: false
   skip_tag_regex:
     description: "Regular expression to skip terragrunt planning for certain tags"
     required: false
@@ -34,7 +37,7 @@ runs:
   steps:
     - id: main
       shell: bash
-      run: ${{ github.action_path }}/scripts/main.sh
+      run: ${{ github.action_path }}/scripts/main.sh ${{ inputs.tg_args }}
       working-directory: ${{ github.workspace }}/${{ env.WORKDIR }}
       env:
         INPUT_TF_VERSION: ${{ inputs.tf_version }}

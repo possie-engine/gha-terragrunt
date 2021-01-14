@@ -34,9 +34,10 @@ This action includes total three Terragrunt commands, i.e. `terragrunt fmt` to c
 | tg_version     | No        | Terragrunt Version. This defines Terragrunt version to be used, independent from terraform version. <br/> Must be in a format like `0.26.7` or `latest`. Default to `latest`.                                                                                                                              |
 | tg_fmt         | No        | Boolean value to control if the `terragrunt fmt` command is executed by default. <br/> Only two values are allowed `true` or `false`. Default to `true`.                                                                                                                                                   |
 | tg_plan        | No        | Boolean value to control if the `terragrunt plan-all` command is executed by default. <br/> Only two values are allowed `true` or `false`. Default to `true`. <br/> Note that the behaviour can be **overwritten** by a github tag to manually skip the plan command.                                      |
+| tg_args        | No        | Additional arguments to be passed to the `terragrunt` command. For details,refer to [CLI Options](https://terragrunt.gruntwork.io/docs/reference/cli-options/#cli-options)                                                                                                                                 |
 | skip_tag_regex | No        | A shell script-formatted regular expression to match a github tag. With presence of this tag, the `terragrunt plan-all` command is suppressed. <br/> It **overwrites** the behaviour defined by `tg_plan`.<br/> Default to `-skip$`, meaning a tag suffixed with `-skip` manually suppress this operation. |
 
-3. Output variables
+1. Output variables
 
 | Variable Name    | Description                                                                                              |
 | :--------------- | :------------------------------------------------------------------------------------------------------- |
@@ -121,6 +122,7 @@ This action includes total four Terragrunt commands, i.e. `terragrunt fmt` to ch
 | tf_version         | No        | Terraform Version. Terragrunt calls terraform internally, so this defines which terraform version to be used. <br/> Must be in a format like `0.14.2` or `latest`. Default to `latest`.                                                                                   |
 | tg_version         | No        | Terragrunt Version. This defines Terragrunt version to be used, independent from terraform version. <br/> Must be in a format like `0.26.7` or `latest`. Default to `latest`.                                                                                             |
 | tg_fmt             | No        | Boolean value to control if the `terragrunt fmt` command is executed by default. <br/> Only two values are allowed `true` or `false`. Default to `true`.                                                                                                                  |
+| tg_args            | No        | Additional arguments to be passed to the `terragrunt` command. For details,refer to [CLI Options](https://terragrunt.gruntwork.io/docs/reference/cli-options/#cli-options)                                                                                                |
 | tg_output          | No        | Boolean value to control if the `terragrunt output-all` command is executed after `terragrunt apply-all`. <br/> For the destroy operation, this value ignored.<br/>Only two values are allowed `true` or `false`. Default to `true`.                                      |
 | tg_output_dir      | No        | The above output is in JSON format and this variable defines the directory to store the JSON file. <br/> This is a relative path to the working directory(i.e., the WORKDIR envar). <br/> For the destroy operation, this value ignored. <br/> Default to `_gha_outputs`. |
 | tg_output_filename | No        | The name of the above JSON file. <br/> For the destroy operation, this value ignored.<br/> Default to `terragrunt_outputs.json`.                                                                                                                                          |
@@ -184,7 +186,8 @@ jobs:
         with:
           tf_version: "0.14.2"	# Use a specific version of terraform instead of "latest"
           tg_version: "0.26.7"  # Use a specific version of terragrunt instead of "latest"
-          tg_fmt: false # Suppress the format checking step
+					tg_fmt: false # Suppress the format checking step
+					tg_args: "--terragrunt-ignore-dependency-errors" # Additional terragrunt cli options
           destroy_tag_regex: "-destroy$" # Regex to match a tag that initiates the destroy operation
 
       - id: upload

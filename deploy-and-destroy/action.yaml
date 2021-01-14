@@ -18,6 +18,9 @@ inputs:
     description: "Whether or not terragrunt output should be conducted"
     required: false
     default: "true"
+  tg_args:
+    description: "Additional arguments to be passed to terragrunt command"
+    required: false
   tg_output_dir:
     description: "The terragrunt output directory"
     required: false
@@ -42,7 +45,7 @@ runs:
   steps:
     - id: main
       shell: bash
-      run: ${{ github.action_path }}/scripts/main.sh
+      run: ${{ github.action_path }}/scripts/main.sh ${{ inputs.tg_args }}
       working-directory: ${{ github.workspace }}/${{ env.WORKDIR }}
       env:
         INPUT_TF_VERSION: ${{ inputs.tf_version }}
