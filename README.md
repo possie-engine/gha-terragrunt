@@ -66,7 +66,7 @@ name: "Sample Validation and Planning"
 on:
   push:
     tags:
-      - "plan-*"
+      - "plan-app-*"
 
 jobs:
   sample:
@@ -85,15 +85,16 @@ jobs:
           AWS_CREDENTIALS: ${{ secrets.AWS_CREDENTIALS }}
           AWS_CONFIG: ${{ secrets.AWS_CONFIG }}
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
-          TF_MODULE_KEY: ${{ secrets.DEPLOY_KEY }}
-          CR_URL: "ghcr.io"
-          CR_USERNAME: ${{ secrets.CR_USER_NAME }}
-          CR_PWD: ${{ secrets.CR_TOKEN }}
+          # The following envars are not mandatory
+          # TF_MODULE_KEY: ${{ secrets.DEPLOY_KEY }}
+          # CR_URL: "ghcr.io"
+          # CR_USERNAME: ${{ secrets.CR_USER_NAME }}
+          # CR_PWD: ${{ secrets.CR_TOKEN }}
         with:
           tf_version: "0.14.2"	# Use a specific version of terraform instead of "latest"
           tg_version: "0.26.7"  # Use a specific version of terragrunt instead of "latest"
           tg_fmt: false # Suppress the format checking step
-          skip_tag_regex: "-skip$" # Match a tag pattern to skip the plan-all step
+          skip_tag_regex: "-app-skip$" # Match a tag pattern to skip the plan-all step
 ```
 
 ---
@@ -144,7 +145,7 @@ This action includes total four Terragrunt commands, i.e. `terragrunt fmt` to ch
 
 5. Code Examples
 
-This action is usually used on the protected `main` branch which ONLY the repo admin has the full access to it. Other collaborators can not push to the `main` branch. So, destroying resources can ONLY be conducted by the admin and applying resource changes are conducted by pull requests.
+This action is usually used on certain protected `feature` branch which **ONLY** the repo admin has the full access to it. Other collaborators can not push to the corresponding `feature` branch. So, destroying resources can **ONLY** be conducted by the admin and applying resource changes are conducted by pull requests.
 
 **Note:** The github tag to initiate the destroy operation is **automatically** deleted by this action to avoid too many useless tags. However, the local tag is not deleted and should be manually deleted. Otherwise, if you use `git push --follow-tags` to sync the remote tags with the local tags, the local tag will be pushed to the remote repo again in a subsequent `git push` operation and the github action's behaviour is maintained.
 
@@ -154,16 +155,16 @@ name: "Sample"
 on:
   pull_request:
     branches:
-      - main
+      - feature/app
     types: [closed]
   push:
     tags:
-      - "*-destroy"
+      - "*-app-destroy"
 
 jobs:
   sample:
     # Short-circuit the job if the condition does not match, though redundant.
-    if: github.event.pull_request.merged == true || (github.event_name == 'push' && endsWith(github.ref, '-destroy'))
+    if: github.event.pull_request.merged == true || (github.event_name == 'push' && endsWith(github.ref, '-app-destroy'))
     name: Sample
     runs-on: ubuntu-latest
     steps:
@@ -179,16 +180,17 @@ jobs:
           AWS_CREDENTIALS: ${{ secrets.AWS_CREDENTIALS }}
           AWS_CONFIG: ${{ secrets.AWS_CONFIG }}
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
-          TF_MODULE_KEY: ${{ secrets.DEPLOY_KEY_PRIV }}
-          CR_URL: "ghcr.io"
-          CR_USERNAME: ${{ secrets.CR_USER_NAME }}
-          CR_PWD: ${{ secrets.CR_TOKEN }}
+          # The following envars are not mandatory
+          # TF_MODULE_KEY: ${{ secrets.DEPLOY_KEY_PRIV }}
+          # CR_URL: "ghcr.io"
+          # CR_USERNAME: ${{ secrets.CR_USER_NAME }}
+          # CR_PWD: ${{ secrets.CR_TOKEN }}
         with:
           tf_version: "0.14.2"	# Use a specific version of terraform instead of "latest"
           tg_version: "0.26.7"  # Use a specific version of terragrunt instead of "latest"
-					tg_fmt: false # Suppress the format checking step
-					tg_args: "--terragrunt-ignore-dependency-errors" # Additional terragrunt cli options
-          destroy_tag_regex: "-destroy$" # Regex to match a tag that initiates the destroy operation
+          tg_fmt: false # Suppress the format checking step
+          tg_args: "--terragrunt-ignore-dependency-errors" # Additional terragrunt cli options
+          destroy_tag_regex: "-app-destroy$" # Regex to match a tag that initiates the destroy operation
 
       - id: upload
         if: github.event.pull_request.merged == true
@@ -210,15 +212,16 @@ If you want to assign a different output directory or output file name,
     AWS_CREDENTIALS: ${{ secrets.AWS_CREDENTIALS }}
     AWS_CONFIG: ${{ secrets.AWS_CONFIG }}
     KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
-    TF_MODULE_KEY: ${{ secrets.DEPLOY_KEY_PRIV }}
-    CR_URL: "ghcr.io"
-    CR_USERNAME: ${{ secrets.CR_USER_NAME }}
-    CR_PWD: ${{ secrets.CR_TOKEN }}
+    # The following envars are not mandatory
+    # TF_MODULE_KEY: ${{ secrets.DEPLOY_KEY_PRIV }}
+    # CR_URL: "ghcr.io"
+    # CR_USERNAME: ${{ secrets.CR_USER_NAME }}
+    # CR_PWD: ${{ secrets.CR_TOKEN }}
   with:
     tf_version: "0.14.2"	# Use a specific version of terraform instead of "latest"
     tg_version: "0.26.7"  # Use a specific version of terragrunt instead of "latest"
     tg_fmt: false # Suppress the format checking step
-    destroy_tag_regex: "-destroy$" # Regex to match a tag that initiates the destroy operation
+    destroy_tag_regex: "-app-destroy$" # Regex to match a tag that initiates the destroy operation
     tg_output_dir: "tg_output_folder" # Use a different output directory other than the default one
     tg_output_filename: "tg_output.json" # Use a different output file name other than the default one
 ```
