@@ -3,7 +3,7 @@
 function terragruntPlan() {
 	# Gather the output of `terragrunt plan`.
 	echo "plan: info: planning Terragrunt configuration in ${tfWorkingDir}"
-	planCommand="terragrunt plan-all -detailed-exitcode -input=false ${*} 2>&1"
+	planCommand="terragrunt run-all plan -detailed-exitcode -input=false ${*} 2>&1"
 	planOutput=$(eval ${planCommand})
 	planExitCode=${?}
 	planHasChanges=false

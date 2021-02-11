@@ -4,7 +4,7 @@ function terragruntOutput() {
 	# Gather the output of `terragrunt output`.
 	echo "output: info: gathering all the outputs for the Terragrunt configuration in ${tfWorkingDir}"
 	mkdir -p "${tgOutputDir}"
-	outputCommand="terragrunt output-all -json ${*} 2>&1 >${tgOutputDir}/${tgOutputFileName}"
+	outputCommand="terragrunt run-all output -json ${*} 2>&1 >${tgOutputDir}/${tgOutputFileName}"
 	outputOutput=$(eval ${outputCommand})
 	outputExitCode=${?}
 

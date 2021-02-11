@@ -3,7 +3,7 @@
 function terragruntValidate() {
 	# Gather the output of `terragrunt validate`.
 	echo "validate: info: validating Terragrunt configuration in ${tfWorkingDir}"
-	validateCommand="terragrunt validate-all ${*} 2>&1"
+	validateCommand="terragrunt run-all validate ${*} 2>&1"
 	validateOutput=$(eval ${validateCommand})
 	validateExitCode=${?}
 

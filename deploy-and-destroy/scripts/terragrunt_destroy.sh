@@ -3,7 +3,7 @@
 function terragruntDestroy() {
 	# Gather the output of `terragrunt destroy`.
 	echo "destroy: info: destroying Terragrunt-managed infrastructure in ${tfWorkingDir}"
-	destroyCommand="terragrunt destroy-all --terragrunt-non-interactive ${*} 2>&1"
+	destroyCommand="terragrunt run-all destroy --terragrunt-non-interactive ${*} 2>&1"
 	destroyOutput=$(eval ${destroyCommand})
 	destroyExitCode=${?}
 
